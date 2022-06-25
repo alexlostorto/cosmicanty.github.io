@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 .logo {
-    margin-right: 50px;
     margin-right: auto;
     width: 100px;
     cursor: pointer;
@@ -30,13 +29,13 @@ header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    height: 70px;
     padding: 20px 20px 20px 20px;
 }
 
 .website-header {
-    left: 0;
-    right: 0;
     margin: 0 auto;
+    margin-left: calc(100% / 2 - 300px);
     font-family: "Montserrat", sans-serif;
     font-weight: 600;
     font-size: 45px;
@@ -194,4 +193,8 @@ html, body {
     align-items: center;
     margin: 40px auto 0px 5px;
     padding: 20px 20px 20px 20px;
+}
+
+.secretLink {
+    cursor: default;
 }
