@@ -19,24 +19,50 @@
       <h1 class="website-header">Maths Functions</h1>
       <nav>
         <ul class="nav_links">
-          <li><a href="#">Extra</a></li>
-          <li><a href="#">Projects</a></li>
-          <li><a href="#">About</a></li>
+          <li><a class="link" href="#">Extra</a></li>
+          <li><a class="link" href="#">Projects</a></li>
+          <li><a class="link" href="#">About</a></li>
         </ul>
       </nav>
-      <a class="cta" href="#"><button class="contact">Contact</button></a>
+      <a class="link" href="#"><button class="contact">Contact</button></a>
     </header>
-    <div class="card-1">
-      <h2 class="counter-header">About</h2>
-      <p class="counter" id="par">1</p>
-      <ul class="buttons">
-        <button class="counter-button" onclick="add()">Increase by 1</button>
-        <button class="counter-button" onclick="reset()">Reset</button>
-        <button class="counter-button" onclick="minus()">Decrease by 1</button>
-      </ul>
+    <div class="main-body">
+      <div class="card-1">
+        <h2 class="about-header">About</h2>
+        <p class="text">
+          This website was created on the 22nd June 2022 and is being updated
+          constantly to house newer and more exciting projects!
+        </p>
+        <h3>The Birth of This website</h3>
+        <p class="text">
+          I created this website after a STEM Venturi club where we used
+          <a class="link" href="https://anvil.works/" target="_blank"
+            >Anvil.works</a
+          >
+          to create a website using Python. However, although the designing of
+          the site was very intuitive, I had no basic knowledge of HTML and I
+          was unable to fully exploit the capabilities of Anvil. <br /><br />
+          Therefore I chose to take the arduous yet incredibly satisfying
+          journey of building my own website! The goal for this website is to be
+          able to house most of my code so it can be run remotely, especially
+          maths functions (as the website header suggests). Also, in the future
+          I may use this website as my portfolio to showcase a variety of
+          different things, making it easier for me to represent myself.
+        </p>
+      </div>
+      <div class="card-2">
+        <h2 class="counter-header">Counter</h2>
+        <p class="counter" id="par">1</p>
+        <ul class="buttons">
+          <button class="counter-button" onclick="add()">Increase by 1</button>
+          <button class="counter-button" onclick="reset()">Reset</button>
+          <button class="counter-button" onclick="minus()">
+            Decrease by 1
+          </button>
+        </ul>
+      </div>
+      <div class="card-3"></div>
     </div>
-    <div class="card-2"></div>
-    <div class="card-3"></div>
     <div class="footer">
       <ul class="footer-links">
         <li><a href="#">About</a></li>
