@@ -287,9 +287,18 @@ p, li, button {
     list-style: none;
 }
 
+.footer ul{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.footer-links {
+    width: 100%;
+    padding-left: 0px;
+}
+
 .footer-links li {
-    display: inline-block;
-    padding: 0px 10vw;
+    padding: 0px;
 }
 
 .footer-links li a {
@@ -306,11 +315,11 @@ p, li, button {
 }
 
 .footer {
-    right: 13px;
+    /* right: 13px; */
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    /* position: relative; */
     width: 100%;
     background-color: #24252a;
     margin: 10px auto 10px;
@@ -322,6 +331,7 @@ p, li, button {
     list-style: none;
     text-align: center;
     margin: 0 auto 30px;
+    padding-left: 25px;
     justify-content: center;
 }
 
@@ -340,24 +350,21 @@ p, li, button {
 }
 
 @media (max-width: 800px) {
-    .footer-links li {
-        padding: 0px 40px;
-    }
-
     .copyright-footer li {
         padding: 0px 20px;
-        left: -10px;
     }
 }
 
 @media (max-width: 500px) {
-    .footer-links li {
-        padding: 0px 30px;
-    }
-
     .copyright-footer li {
         padding: 0px 10px;
-        left: -10px;
+    }
+}
+
+@media (max-width: 450px) {
+    .copyright-footer li {
+        padding-left: 0px;
+        padding: 0px 7px;
     }
 }
 
