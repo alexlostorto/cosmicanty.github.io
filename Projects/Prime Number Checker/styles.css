@@ -1,0 +1,158 @@
+/* body */
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@media (min-width: 800px) {
+    h2 {
+        font-size: 45px;
+    }
+
+    h3 {
+        font-size: 30px;
+    }
+
+    .text {
+        font-size: 18px;
+    }
+
+    .counter {
+        font-size: 45px;
+        padding: 20px 40px 20px 40px;
+        border-radius: 50px;
+    }
+
+    p, li, button {
+        font-size: 16px;
+    }
+}
+
+.text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #24252a;
+    padding: 0 calc(100% / 10);
+}
+
+.link {
+    text-decoration: none;
+}
+
+.card-1 {
+    position: relative;
+    width: 100%;
+    height: max-content;
+    background-color: #FFC438;
+    padding: 50px 0px 50px;
+    text-align: center;
+    justify-content: center;
+}
+
+.counter {
+    position: relative;
+    left: 0;
+    right: 0;
+    background-color: #24252a;
+    width: max-content;
+    border: 0px solid white;
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600; 
+    margin: 50px auto 0px;
+}
+
+.counter-button {
+    position: relative;
+    padding: 9px 25px;
+    background-color: #24252a;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    margin: 0 10px;
+}
+
+.counter-button:hover {
+    background-color: rgba(36,37,42, 0.8);
+}
+
+h2 {
+    position: relative;
+    margin: 0 auto 50px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #24252a;
+}
+
+h3 {
+    position: relative;
+    margin: 50px auto 20px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #24252a;
+}
+
+.buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px auto 0px 5px;
+    padding: 20px 20px 20px 20px;
+}
+
+input {
+    border: 0;
+    outline: 0;
+    padding: 0px;
+    margin-top: 20px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #24252a;
+    font-size: 15px;
+    background: transparent;
+    border-bottom: 2px solid #24252a;
+    text-align: center;
+}
+
+input::placeholder {
+    font-weight: bold;
+    /* opacity: 0.5; */
+    color: #24252a;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.card-2 {
+    position: relative;
+    width: 100%;
+    height: max-content;
+    background-color: #CF6DDE;
+    padding: 50px 0px 50px;
+    text-align: center;
+    justify-content: center;
+}
+
+.card-3 {
+    position: relative;
+    width: 100%;
+    height: max-content;
+    background-color: #61346B;
+    padding: 50px 0px 50px;
+    text-align: center;
+    justify-content: center;
+}
+
+/* body */
