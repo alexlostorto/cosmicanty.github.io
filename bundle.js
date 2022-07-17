@@ -1,8 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 let i = 1;
 
-document.getElementById("par").innerHTML = i;
-
 function add() {
   i++;
   document.getElementById("par").innerHTML = i;
@@ -18,7 +16,22 @@ function reset() {
   document.getElementById("par").innerHTML = 0;
 }
 
-// GTP-3 API 
+document.getElementById("par").innerHTML = i;
+const addButton = document.getElementById("add")
+const resetButton = document.getElementById("reset")
+const minusButton = document.getElementById("minus")
+
+addButton.addEventListener('click', (event)=> {
+  add()
+})
+
+resetButton.addEventListener('click', (event)=> {
+  reset()
+})
+
+minusButton.addEventListener('click', (event)=> {
+  minus()
+})
 
 const prompt = document.getElementById("prompt");
 
@@ -37,7 +50,7 @@ prompt.addEventListener('keypress', (event)=> {
 const api = async function(prompt) {
   const { Configuration, OpenAIApi } = require("openai");
   key = "sk-HSowNjhUsbERaLBznV1dT3Bl" + "bkFJ27FDLWkJ1AkSVEe7yYg1"
-  
+
   const configuration = new Configuration({
     apiKey: key,
   });
@@ -60,7 +73,6 @@ const api = async function(prompt) {
 //  document.getElementById("output").innerHTML = response
 }
 
-// GTP-3 API 
 
 const toggleButton = document.getElementsByClassName('toggle-button')[0]
 const navbarLinks = document.getElementsByClassName('navbar-links')[0]
