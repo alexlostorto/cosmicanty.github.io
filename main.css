@@ -359,6 +359,10 @@ p, li, button {
     .copyright-footer li {
         padding: 0px 10px;
     }
+
+    .copyright-footer {
+        padding-left: 0px;
+    }
 }
 
 @media (max-width: 450px) {
