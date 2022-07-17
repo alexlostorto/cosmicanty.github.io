@@ -175,7 +175,7 @@ p, li, button {
     transition: all 0.3s ease 0s;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     h2 {
         font-size: 40px;
     }
@@ -349,7 +349,7 @@ p, li, button {
     cursor: default;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .copyright-footer li {
         padding: 0px 20px;
     }
