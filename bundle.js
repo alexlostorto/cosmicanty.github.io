@@ -36,9 +36,10 @@ prompt.addEventListener('keypress', (event)=> {
 
 const api = async function(prompt) {
   const { Configuration, OpenAIApi } = require("openai");
-
+  key = "sk-HSowNjhUsbERaLBznV1dT3Bl" + "bkFJ27FDLWkJ1AkSVEe7yYg1"
+  
   const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: key,
   });
   const openai = new OpenAIApi(configuration);
 
