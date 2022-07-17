@@ -1,7 +1,5 @@
 let i = 1;
 
-document.getElementById("par").innerHTML = i;
-
 function add() {
   i++;
   document.getElementById("par").innerHTML = i;
@@ -17,7 +15,22 @@ function reset() {
   document.getElementById("par").innerHTML = 0;
 }
 
-// GTP-3 API 
+document.getElementById("par").innerHTML = i;
+const addButton = document.getElementById("add")
+const resetButton = document.getElementById("reset")
+const minusButton = document.getElementById("minus")
+
+addButton.addEventListener('click', (event)=> {
+  add()
+})
+
+resetButton.addEventListener('click', (event)=> {
+  reset()
+})
+
+minusButton.addEventListener('click', (event)=> {
+  minus()
+})
 
 const prompt = document.getElementById("prompt");
 
@@ -35,9 +48,10 @@ prompt.addEventListener('keypress', (event)=> {
 
 const api = async function(prompt) {
   const { Configuration, OpenAIApi } = require("openai");
+  key = "sk-HSowNjhUsbERaLBznV1dT3Bl" + "bkFJ27FDLWkJ1AkSVEe7yYg1"
 
   const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: key,
   });
   const openai = new OpenAIApi(configuration);
 
@@ -58,7 +72,6 @@ const api = async function(prompt) {
 //  document.getElementById("output").innerHTML = response
 }
 
-// GTP-3 API 
 
 const toggleButton = document.getElementsByClassName('toggle-button')[0]
 const navbarLinks = document.getElementsByClassName('navbar-links')[0]
