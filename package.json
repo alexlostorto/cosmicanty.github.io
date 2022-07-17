@@ -1,0 +1,17 @@
+{
+  "name": "maths_functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "myScript.js",
+  "scripts": {
+    "build": "browserify myScript.js -o bundle.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^17.0.0"
+  },
+  "dependencies": {
+    "openai": "^3.0.0"
+  }
+}
