@@ -8,6 +8,7 @@ At the moment, my website does have quite a bit of functionality! YAYYYYY!!!! As
 
 Here are the current features:
 * GTP-3 API
+* Location API
 * Quizlet Revision
 * Quadratic Solver
 * Prime Number Checker
