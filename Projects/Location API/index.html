@@ -1,0 +1,245 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2250%22 fill=%22%23ffc438%22></rect><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2290%22>🚀</text></svg>"
+    />
+    <script src="bundle.js" defer></script>
+    <link rel="stylesheet" href="../../main.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Maths Functions</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a download="Cute Cat.png" href="../../Images/Cute_Grey_Cat_Edited.png">
+        <img
+          class="logo"
+          src="../../Images/Cute_Grey_Cat_Edited.png"
+          alt="Cute cat logo"
+        />
+      </a>
+      <div class="brand-title">
+        <a href="../../index.html">Maths Functions</a>
+      </div>
+      <a href="#" class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar-contact"></span>
+      </a>
+      <div class="navbar-links">
+        <ul class="navbar-links-ul">
+          <!-- <li><a href="#">Home</a></li> -->
+          <li><a class="about-link" href="../../About/index.html">About</a></li>
+          <li class="project-button">
+            <a class="project-link" href="#">Projects</a>
+            <div class="projects">
+              <ul>
+                <li>
+                  <a class="sub-link" href="../../Projects/GTP-3 API/index.html"
+                    >GTP-3 API</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="sub-link"
+                    href="../../Projects/Location API/index.html"
+                    >Location API</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="sub-link"
+                    href="../../Projects/Quizlet Revision/index.html"
+                    >Quizlet Revision</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="sub-link"
+                    href="../../Projects/Quadratic Solver/index.html"
+                    >Quadratic Solver</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="sub-link"
+                    href="../../Projects/Prime Number Checker/index.html"
+                    >Prime Number Checker</a
+                  >
+                </li>
+                <!-- <li>
+                  <a class="sub-link" href="../../Coming Soon/index.html"
+                    >COMING SOON</a
+                  >
+                </li> -->
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a class="contact" href="../../Contact/index.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="card-1">
+      <h2>Location API</h2>
+      <p class="text">
+        This is a function which contacts
+        <a class="link" target="_blank" href="https://icanhazip.com"
+          >icanhazip.com</a
+        >
+        and posts the IP address to the
+        <a
+          class="link"
+          target="_blank"
+          href="https://rapidapi.com/ipregistry3-ipregistry/api/ip-geolocation-and-threat-detection"
+          >IP Geolocation and Threat Detection API</a
+        >
+        provided by
+        <a class="link" target="_blank" href="https://rapidapi.com/"
+          >Rapid API</a
+        >
+        to retrieve information about the given IP address. <br />
+        <br />
+        Click start to contact the API.
+      </p>
+      <button class="start-button">Start</button>
+      <h3>Output</h3>
+      <p id="output" class="text output">This is where the output will be...</p>
+      <div class="api-info">
+        <ul class="api-ul">
+          <h4>IP Information</h4>
+          <li>
+            <p>IPv4</p>
+            <p id="ip" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Provider</p>
+            <p id="provider" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Company</p>
+            <p id="company" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Connection Domain</p>
+            <p id="domain" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Connection Organization</p>
+            <p id="organization" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Connection Route</p>
+            <p id="route" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Connection Type</p>
+            <p id="connectionType" class="api-response">Null</p>
+          </li>
+          <h4>Location</h4>
+          <li>
+            <p>Continent</p>
+            <p id="continent" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Country</p>
+            <p id="country" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Capital</p>
+            <p id="capital" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Country Code</p>
+            <p id="countryCode" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Country Population</p>
+            <p id="population" class="api-response">Null</p>
+          </li>
+          <ul id="languages-ul"></ul>
+          <li>
+            <p>Region</p>
+            <p id="region" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>City</p>
+            <p id="city" class="api-response">Null</p>
+          </li>
+          <h4>Security</h4>
+          <ul id="security-ul"></ul>
+          <h4>Time Zone</h4>
+          <li>
+            <p>Time Zone ID</p>
+            <p id="timeZoneID" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Time Zone Abbr.</p>
+            <p id="timeZoneAbbr" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Local Time</p>
+            <p id="localTime" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Time Zone</p>
+            <p id="timeZone" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Daylight Saving</p>
+            <p id="daylightSaving" class="api-response">Null</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-2">
+      <h2 class="counter-header">Counter</h2>
+      <p class="counter" id="par">1</p>
+      <ul class="buttons">
+        <button class="counter-button" onclick="add()">Increase by 1</button>
+        <button class="counter-button" onclick="reset()">Reset</button>
+        <button class="counter-button" onclick="minus()">Decrease by 1</button>
+      </ul>
+    </div>
+    <div class="card-3"></div>
+    <div class="footer">
+      <ul class="footer-links">
+        <li><a href="../../About/index.html">About</a></li>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../Contact/index.html">Contact</a></li>
+      </ul>
+    </div>
+    <ul class="copyright-footer">
+      <li>
+        &copy;
+        <a
+          class="secretLink"
+          href="https://replit.com/@CosmicAnty"
+          target="_blank"
+          >Cosmic</a
+        >
+        <a
+          class="secretLink"
+          href="https://replit.com/@CosmicAnty/Python-Files?v=1"
+          target="_blank"
+          >Anty</a
+        >
+      </li>
+      <li>
+        Published on
+        <a
+          class="secretLink"
+          href="https://github.com/CosmicAnty/Maths-Functions"
+          target="_blank"
+          >Github</a
+        >
+      </li>
+    </ul>
+  </body>
+</html>
