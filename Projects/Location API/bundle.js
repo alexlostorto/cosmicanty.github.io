@@ -27,7 +27,12 @@ const output = document.getElementsByClassName('output')[0];
 const apiInfo = document.getElementsByClassName('api-info')[0];
 
 startButton.addEventListener('click', () => {
-  output.innerHTML = "loading...";
+  output.innerHTML = "loading...<br><br><i>if the response doesn't load in a few seconds click the button again.</i>";
+  resetHTML()
+  if(apiInfo.classList.contains('active')) {
+    apiInfo.classList.toggle('active');
+    output.classList.toggle('active');
+  }
   locationAPI().then(
     output.classList.toggle('active'),
     apiInfo.classList.toggle('active')
@@ -86,6 +91,35 @@ const ipAPI = async function() {
     return ipAddress;
 }
 
+function resetHTML() {
+    IP.innerHTML = "Null";
+    provider.innerHTML = "Null";
+    company.innerHTML = "Null";
+    connectionDomain.innerHTML = "Null";
+    connectionOrganization.innerHTML = "Null";
+    connectionRoute.innerHTML = "Null";
+    connectionType.innerHTML = "Null";
+    continent.innerHTML = "Null";
+    country.innerHTML = "Null";
+    capital.innerHTML = "Null";
+    countryCode.innerHTML = "Null";
+    population.innerHTML = "Null";
+    var langNumber = 0;
+    while (languages.firstChild) {
+      languages.removeChild(languages.firstChild);
+    }
+    region.innerHTML = "Null";
+    city.innerHTML = "Null";
+    while (security.firstChild) {
+      security.removeChild(security.firstChild);
+    }
+    timeZoneID.innerHTML = "Null";
+    timeZoneAbbr.innerHTML = "Null";
+    localTime.innerHTML = "Null";
+    timeZone.innerHTML = "Null";
+    timeZoneDaylightSavingR = "Null";
+    daylightSaving.innerHTML = "Null";
+}
 
 const locationAPI = async function() {
   var ipAddress = await ipAPI();
