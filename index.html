@@ -3,27 +3,27 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="bundle.js" defer></script>
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2250%22 fill=%22%23ffc438%22></rect><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2290%22>🚀</text></svg>"
     />
-    <script src="bundle.js" defer></script>
-    <link rel="stylesheet" href="../../main.css" />
+    <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="styles.css" />
     <title>Maths Functions</title>
   </head>
   <body>
     <nav class="navbar">
-      <a download="Cute Cat.png" href="../../Images/Cute_Grey_Cat_Edited.png">
+      <a download="Cute Cat.png" href="Images/Cute_Grey_Cat_Edited.png">
         <img
           class="logo"
-          src="../../Images/Cute_Grey_Cat_Edited.png"
+          src="Images/Cute_Grey_Cat_Edited.png"
           alt="Cute cat logo"
         />
       </a>
       <div class="brand-title">
-        <a href="../../index.html">Maths Functions</a>
+        <a href="index.html">Maths Functions</a>
       </div>
       <a href="#" class="toggle-button">
         <span class="bar"></span>
@@ -34,150 +34,90 @@
       <div class="navbar-links">
         <ul class="navbar-links-ul">
           <!-- <li><a href="#">Home</a></li> -->
-          <li><a class="about-link" href="../../About/index.html">About</a></li>
+          <li><a class="about-link" href="About/index.html">About</a></li>
           <li class="project-button">
             <a class="project-link" href="#">Projects</a>
             <div class="projects">
               <ul>
                 <li>
-                  <a class="sub-link" href="../../Projects/GTP-3 API/index.html"
+                  <a class="sub-link" href="Projects/GTP-3 API/index.html"
                     >GTP-3 API</a
                   >
                 </li>
                 <li>
-                  <a
-                    class="sub-link"
-                    href="../../Projects/Weather API/index.html"
+                  <a class="sub-link" href="Projects/Weather API/index.html"
                     >Weather API</a
                   >
                 </li>
                 <li>
-                  <a
-                    class="sub-link"
-                    href="../../Projects/Location API/index.html"
+                  <a class="sub-link" href="Projects/Location API/index.html"
                     >Location API</a
                   >
                 </li>
                 <li>
                   <a
                     class="sub-link"
-                    href="../../Projects/Quizlet Revision/index.html"
+                    href="Projects/Quizlet Revision/index.html"
                     >Quizlet Revision</a
                   >
                 </li>
                 <li>
                   <a
                     class="sub-link"
-                    href="../../Projects/Quadratic Solver/index.html"
+                    href="Projects/Quadratic Solver/index.html"
                     >Quadratic Solver</a
                   >
                 </li>
                 <li>
                   <a
                     class="sub-link"
-                    href="../../Projects/Prime Number Checker/index.html"
+                    href="Projects/Prime Number Checker/index.html"
                     >Prime Number Checker</a
                   >
                 </li>
                 <!-- <li>
-                  <a class="sub-link" href="../../Coming Soon/index.html"
+                  <a class="sub-link" href="../Coming Soon/index.html"
                     >COMING SOON</a
                   >
                 </li> -->
+                <!-- <li><a class="sub-link" href="#">Project 3</a></li>
+                <li><a class="sub-link" href="#">Project 4</a></li> -->
               </ul>
             </div>
           </li>
           <li>
-            <a class="contact" href="../../Contact/index.html">Contact</a>
+            <a class="contact" href="Contact/index.html">Contact</a>
           </li>
         </ul>
       </div>
     </nav>
     <div class="card-1">
-      <h2>Weather API</h2>
-      <p class="text">
-        This is a function which contacts the
-        <a class="link" target="_blank" href="https://www.weatherapi.com/"
-          >Weather API</a
-        >
-        with the given city name to retrieve current weather statistics of that
-        city. <br />
-        <br />
-        Press enter to submit the city name.
-      </p>
-      <input placeholder="City Name" id="prompt" type="text" />
-      <h3>Output</h3>
-      <p id="output" class="text output">This is where the output will be...</p>
-      <div class="api-info">
-        <ul class="api-ul">
-          <h4>Current Weather Information</h4>
-          <li>
-            <p>City</p>
-            <p id="cityName" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Region</p>
-            <p id="region" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Country</p>
-            <p id="country" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Local Time</p>
-            <p id="localTime" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Temp &deg;C</p>
-            <p id="tempC" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Temp &deg;F</p>
-            <p id="tempF" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Is Day</p>
-            <p id="isDay" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Condition</p>
-            <p id="condition" class="api-response">Null</p>
-          </li>
-          <h4>Location</h4>
-          <li>
-            <p>Last Updated</p>
-            <p id="lastUpdated" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Wind MPH</p>
-            <p id="windMph" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Wind KPH</p>
-            <p id="windKph" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Wind Direction</p>
-            <p id="windDirection" class="api-response">Null</p>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="card-2">
       <h2 class="counter-header">Counter</h2>
       <p class="counter" id="par">1</p>
       <ul class="buttons">
-        <button class="counter-button" onclick="add()">Increase by 1</button>
-        <button class="counter-button" onclick="reset()">Reset</button>
-        <button class="counter-button" onclick="minus()">Decrease by 1</button>
+        <button id="add" class="counter-button">Increase by 1</button>
+        <button id="reset" class="counter-button">Reset</button>
+        <button id="minus" class="counter-button">Decrease by 1</button>
       </ul>
+    </div>
+    <div class="card-2">
+      <h2>GTP-3 API</h2>
+      <p class="text">
+        This is a function which uses the OPENAI GTP-3 API to create human-like
+        text from a prompt. <br /><br />
+        E.g. Write a description about how amazing this website is.<br /><br />
+        Press enter to submit the prompt.
+      </p>
+      <input placeholder="Prompt" id="prompt" type="text" />
+      <h3>Output</h3>
+      <p id="output" class="text">This is where the output will be...</p>
     </div>
     <div class="card-3"></div>
     <div class="footer">
       <ul class="footer-links">
-        <li><a href="../../About/index.html">About</a></li>
-        <li><a href="../../index.html">Home</a></li>
-        <li><a href="../../Contact/index.html">Contact</a></li>
+        <li><a href="About/index.html">About</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Contact/index.html">Contact</a></li>
       </ul>
     </div>
     <ul class="copyright-footer">
