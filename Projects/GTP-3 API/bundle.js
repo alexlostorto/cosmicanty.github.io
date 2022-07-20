@@ -1,6 +1,8 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 let i = 1;
 
+document.getElementById("par").innerHTML = i;
+
 function add() {
   i++;
   document.getElementById("par").innerHTML = i;
@@ -16,79 +18,437 @@ function reset() {
   document.getElementById("par").innerHTML = 0;
 }
 
-document.getElementById("par").innerHTML = i;
-const addButton = document.getElementById("add")
-const resetButton = document.getElementById("reset")
-const minusButton = document.getElementById("minus")
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
+const projectButton = document.getElementsByClassName('project-button')[0];
+const projectLinks = document.getElementsByClassName('projects')[0];
+const startButton = document.getElementsByClassName('start-button')[0];
+const output = document.getElementsByClassName('output')[0];
+const apiInfo = document.getElementsByClassName('api-info')[0];
 
-addButton.addEventListener('click', (event)=> {
-  add()
-})
-
-resetButton.addEventListener('click', (event)=> {
-  reset()
-})
-
-minusButton.addEventListener('click', (event)=> {
-  minus()
-})
-
-const prompt = document.getElementById("prompt");
-
-prompt.addEventListener('keypress', (event)=> {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    document.getElementById("output").innerHTML = "loading...";
-    api(prompt.value)
-        .then(response => {
-        document.getElementById("output").innerHTML = response;
-        });
-//    document.getElementById("output").innerHTML = "This function is still in production...<br> come back later";
+startButton.addEventListener('click', () => {
+  output.innerHTML = "loading...<br><br><i>if the response doesn't load in a few seconds click the button again.</i>";
+  resetHTML()
+  if(apiInfo.classList.contains('active')) {
+    apiInfo.classList.toggle('active');
+    output.classList.toggle('active');
   }
+  locationAPI().then(
+    output.classList.toggle('active'),
+    apiInfo.classList.toggle('active')
+  )
 })
-
-const api = async function(prompt) {
-  const { Configuration, OpenAIApi } = require("openai");
-  key = "sk-HSowNjhUsbERaLBznV1dT3Bl" + "bkFJ27FDLWkJ1AkSVEe7yYg1"
-
-  const configuration = new Configuration({
-    apiKey: key,
-  });
-  const openai = new OpenAIApi(configuration);
-
-  const response = await openai.createCompletion({
-    model: "text-davinci-002",
-    prompt: prompt,
-    temperature: 0.7,
-    max_tokens: 3000,
-    top_p: 1,
-    frequency_penalty: 0.7,
-    presence_penalty: 0.7,
-  });
-
-  console.log("The following log is the parsed response from the API")
-  parsed = response.data.choices[0].text
-  console.log(parsed)
-  return parsed
-//  document.getElementById("output").innerHTML = response
-}
-
-
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
-const projectButton = document.getElementsByClassName('project-button')[0]
-const projectLinks = document.getElementsByClassName('projects')[0]
 
 toggleButton.addEventListener('click', () => {
-  navbarLinks.classList.toggle('active')
+  navbarLinks.classList.toggle('active');
 })
 
 projectButton.addEventListener('click', () => {
-  projectLinks.classList.toggle('active')
+  projectLinks.classList.toggle('active');
 })
-},{"openai":37}],2:[function(require,module,exports){
+
+
+// LOCATION API 
+
+// ELEMENTS 
+IP = document.getElementById('ip');
+provider = document.getElementById('provider');
+company = document.getElementById('company');
+connectionDomain = document.getElementById('domain');
+connectionOrganization = document.getElementById('organization');
+connectionRoute = document.getElementById('route');
+connectionType = document.getElementById('connectionType');
+continent = document.getElementById('continent');
+country = document.getElementById('country');
+capital = document.getElementById('capital');
+countryCode = document.getElementById('countryCode');
+population = document.getElementById('population');
+languages = document.getElementById('languages-ul');
+region = document.getElementById('region');
+city = document.getElementById('city');
+security = document.getElementById('security-ul');
+timeZoneID = document.getElementById('timeZoneID');
+timeZoneAbbr = document.getElementById('timeZoneAbbr');
+localTime = document.getElementById('localTime');
+timeZone = document.getElementById('timeZone');
+daylightSaving = document.getElementById('daylightSaving');
+
+const axios = require("axios");
+
+function capitalizeFirstLetter(str) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+const ipAPI = async function() {
+    const options2 = {
+        method: 'GET',
+        url: 'https://icanhazip.com/'
+      };
+      
+    const response = await axios.request(options2);
+    const ipAddress = response.data;
+    console.log(ipAddress);
+    return ipAddress;
+}
+
+function resetHTML() {
+    IP.innerHTML = "Null";
+    provider.innerHTML = "Null";
+    company.innerHTML = "Null";
+    connectionDomain.innerHTML = "Null";
+    connectionOrganization.innerHTML = "Null";
+    connectionRoute.innerHTML = "Null";
+    connectionType.innerHTML = "Null";
+    continent.innerHTML = "Null";
+    country.innerHTML = "Null";
+    capital.innerHTML = "Null";
+    countryCode.innerHTML = "Null";
+    population.innerHTML = "Null";
+    var langNumber = 0;
+    while (languages.firstChild) {
+      languages.removeChild(languages.firstChild);
+    }
+    region.innerHTML = "Null";
+    city.innerHTML = "Null";
+    while (security.firstChild) {
+      security.removeChild(security.firstChild);
+    }
+    timeZoneID.innerHTML = "Null";
+    timeZoneAbbr.innerHTML = "Null";
+    localTime.innerHTML = "Null";
+    timeZone.innerHTML = "Null";
+    timeZoneDaylightSavingR = "Null";
+    daylightSaving.innerHTML = "Null";
+}
+
+const locationAPI = async function() {
+  var ipAddress = await ipAPI();
+  const options = {
+      method: 'GET',
+      url: `https://ip-geolocation-and-threat-detection.p.rapidapi.com/${ipAddress}`,
+      headers: {
+        'X-RapidAPI-Key': 'c4a14bc33bmsh9daede13a0e0fa4p18901ejsne4403afad5ac',
+        'X-RapidAPI-Host': 'ip-geolocation-and-threat-detection.p.rapidapi.com'
+      }
+    };
+    
+  axios.request(options).then(function (response) {
+    responseData = response.data;
+    ipR = responseData.ip;
+    typeR = responseData.type;
+    providerNameR = responseData.carrier.name;
+    companyNameR = responseData.company.name;
+    connectionDomainR = responseData.connection.domain;
+    connectionOrganizationR = responseData.connection.organization;
+    connectionRouteR = responseData.connection.route;
+    connectionTypeR = responseData.connection.type;
+    continentNameR = responseData.location.continent.name;
+    countryNameR = responseData.location.country.name;
+    countryCapitalR = responseData.location.country.capital;
+    countryCodeR = responseData.location.country.code;
+    var countryPopulationR = responseData.location.country.population;
+    countryPopulationR = countryPopulationR.toLocaleString();
+    languagesR = responseData.location.country.languages;
+    regionNameR = responseData.location.region.name;
+    cityR = responseData.location.city;
+    securityR = responseData.security;
+    timeZoneIDR = responseData.time_zone.id;
+    timeZoneAbbreviationR = responseData.time_zone.abbreviation;
+    var timeZoneTimeR = responseData.time_zone.current_time;
+    timeZoneNameR = responseData.time_zone.name;
+    timeZoneDaylightSavingR = responseData.time_zone.in_daylight_saving;
+    
+    // CONSOLE 
+    console.log(ipR);
+    console.log(typeR);
+    console.log(providerNameR);
+    console.log(companyNameR);
+    console.log(connectionDomainR);
+    console.log(connectionOrganizationR);
+    console.log(connectionRouteR);
+    console.log(connectionTypeR);
+    console.log(continentNameR);
+    console.log(countryNameR);
+    console.log(countryCapitalR);
+    console.log(countryCodeR);
+    console.log(countryPopulationR);
+    console.log("LANGUAGES");
+    for(let i = 0; i < languagesR.length; i++){ 
+        console.log(languagesR[i].name)
+    }
+    console.log(regionNameR);
+    console.log(cityR);
+    console.log("SECURITY");
+    for (var key in securityR) {
+        console.log(securityR[key]);
+    }
+    console.log(timeZoneIDR);
+    console.log(timeZoneAbbreviationR);
+    // Convert Time 
+    timeDate = timeZoneTimeR.slice(0,10);
+    timeTime = timeZoneTimeR.slice(11,19);
+    timeZoneTimeR = timeDate + "&nbsp;&nbsp;&nbsp;" + timeTime;
+    console.log(timeDate);
+    console.log(timeTime);
+    console.log(timeZoneDaylightSavingR);
+
+
+    // DOCUMENT 
+    IP.innerHTML = ipR;
+    provider.innerHTML = providerNameR;
+    company.innerHTML = companyNameR;
+    connectionDomain.innerHTML = connectionDomainR;
+    connectionOrganization.innerHTML = connectionOrganizationR;
+    connectionRoute.innerHTML = connectionRouteR;
+    connectionType.innerHTML = connectionTypeR;
+    continent.innerHTML = continentNameR;
+    country.innerHTML = countryNameR;
+    capital.innerHTML = countryCapitalR;
+    countryCode.innerHTML = countryCodeR;
+    population.innerHTML = countryPopulationR;
+    var langNumber = 0;
+    let lang = document.getElementById("top");
+    while (languages.firstChild) {
+      languages.removeChild(languages.firstChild);
+    }
+    for(var key in languagesR) { 
+      langNumber ++;
+      value = languagesR[langNumber-1].name;
+      // value = capitalizeFirstLetter(value);
+      const node = document.createElement("li");
+      const pNode1 = document.createElement("p"); 
+      const textnode1 = document.createTextNode(`Language ${langNumber}`);
+      pNode1.appendChild(textnode1);
+      const pNode2 = document.createElement("p");
+      const textnode2 = document.createTextNode(value);
+      pNode2.appendChild(textnode2);
+      node.appendChild(pNode1);
+      pNode2.className = "api-response";
+      node.appendChild(pNode2);
+      languages.appendChild(node);
+    } 
+    // languages.innerHTML = languagesR;
+    region.innerHTML = regionNameR;
+    city.innerHTML = cityR;
+    while (security.firstChild) {
+      security.removeChild(security.firstChild);
+    }
+    for (var key in securityR) {
+      value = securityR[key].toString();
+      value = capitalizeFirstLetter(value);
+      const node = document.createElement("li");
+      const pNode1 = document.createElement("p");
+      const textnode1 = document.createTextNode(key);
+      pNode1.appendChild(textnode1);
+      const pNode2 = document.createElement("p");
+      const textnode2 = document.createTextNode(value);
+      pNode2.appendChild(textnode2);
+      node.appendChild(pNode1);
+      pNode2.className = "api-response";
+      node.appendChild(pNode2);
+      security.appendChild(node);
+    }
+    timeZoneID.innerHTML = timeZoneIDR;
+    timeZoneAbbr.innerHTML = timeZoneAbbreviationR;
+    localTime.innerHTML = timeZoneTimeR;
+    timeZone.innerHTML = timeZoneNameR;
+    timeZoneDaylightSavingR = capitalizeFirstLetter(timeZoneDaylightSavingR.toString());
+    daylightSaving.innerHTML = timeZoneDaylightSavingR;
+    
+  }).catch(function (error) {
+    console.error(error);
+  });
+}
+
+},{"axios":3}],2:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],3:[function(require,module,exports){
 module.exports = require('./lib/axios');
-},{"./lib/axios":4}],3:[function(require,module,exports){
+},{"./lib/axios":5}],4:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -302,7 +662,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-},{"../cancel/Cancel":5,"../core/buildFullPath":10,"../core/createError":11,"../defaults/transitional":18,"./../core/settle":15,"./../helpers/buildURL":21,"./../helpers/cookies":23,"./../helpers/isURLSameOrigin":26,"./../helpers/parseHeaders":28,"./../utils":31}],4:[function(require,module,exports){
+},{"../cancel/Cancel":6,"../core/buildFullPath":11,"../core/createError":12,"../defaults/transitional":19,"./../core/settle":16,"./../helpers/buildURL":22,"./../helpers/cookies":24,"./../helpers/isURLSameOrigin":27,"./../helpers/parseHeaders":29,"./../utils":32}],5:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -361,7 +721,7 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-},{"./cancel/Cancel":5,"./cancel/CancelToken":6,"./cancel/isCancel":7,"./core/Axios":8,"./core/mergeConfig":14,"./defaults":17,"./env/data":19,"./helpers/bind":20,"./helpers/isAxiosError":25,"./helpers/spread":29,"./utils":31}],5:[function(require,module,exports){
+},{"./cancel/Cancel":6,"./cancel/CancelToken":7,"./cancel/isCancel":8,"./core/Axios":9,"./core/mergeConfig":15,"./defaults":18,"./env/data":20,"./helpers/bind":21,"./helpers/isAxiosError":26,"./helpers/spread":30,"./utils":32}],6:[function(require,module,exports){
 'use strict';
 
 /**
@@ -382,7 +742,7 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var Cancel = require('./Cancel');
@@ -503,14 +863,14 @@ CancelToken.source = function source() {
 
 module.exports = CancelToken;
 
-},{"./Cancel":5}],7:[function(require,module,exports){
+},{"./Cancel":6}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -660,7 +1020,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = Axios;
 
-},{"../helpers/buildURL":21,"../helpers/validator":30,"./../utils":31,"./InterceptorManager":9,"./dispatchRequest":12,"./mergeConfig":14}],9:[function(require,module,exports){
+},{"../helpers/buildURL":22,"../helpers/validator":31,"./../utils":32,"./InterceptorManager":10,"./dispatchRequest":13,"./mergeConfig":15}],10:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -716,7 +1076,7 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 
 module.exports = InterceptorManager;
 
-},{"./../utils":31}],10:[function(require,module,exports){
+},{"./../utils":32}],11:[function(require,module,exports){
 'use strict';
 
 var isAbsoluteURL = require('../helpers/isAbsoluteURL');
@@ -738,7 +1098,7 @@ module.exports = function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 };
 
-},{"../helpers/combineURLs":22,"../helpers/isAbsoluteURL":24}],11:[function(require,module,exports){
+},{"../helpers/combineURLs":23,"../helpers/isAbsoluteURL":25}],12:[function(require,module,exports){
 'use strict';
 
 var enhanceError = require('./enhanceError');
@@ -758,7 +1118,7 @@ module.exports = function createError(message, config, code, request, response) 
   return enhanceError(error, config, code, request, response);
 };
 
-},{"./enhanceError":13}],12:[function(require,module,exports){
+},{"./enhanceError":14}],13:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -847,7 +1207,7 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
-},{"../cancel/Cancel":5,"../cancel/isCancel":7,"../defaults":17,"./../utils":31,"./transformData":16}],13:[function(require,module,exports){
+},{"../cancel/Cancel":6,"../cancel/isCancel":8,"../defaults":18,"./../utils":32,"./transformData":17}],14:[function(require,module,exports){
 'use strict';
 
 /**
@@ -892,7 +1252,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
   return error;
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils');
@@ -993,7 +1353,7 @@ module.exports = function mergeConfig(config1, config2) {
   return config;
 };
 
-},{"../utils":31}],15:[function(require,module,exports){
+},{"../utils":32}],16:[function(require,module,exports){
 'use strict';
 
 var createError = require('./createError');
@@ -1020,7 +1380,7 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
-},{"./createError":11}],16:[function(require,module,exports){
+},{"./createError":12}],17:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1044,7 +1404,7 @@ module.exports = function transformData(data, headers, fns) {
   return data;
 };
 
-},{"../defaults":17,"./../utils":31}],17:[function(require,module,exports){
+},{"../defaults":18,"./../utils":32}],18:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -1179,7 +1539,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 }).call(this)}).call(this,require('_process'))
-},{"../adapters/http":3,"../adapters/xhr":3,"../core/enhanceError":13,"../helpers/normalizeHeaderName":27,"../utils":31,"./transitional":18,"_process":39}],18:[function(require,module,exports){
+},{"../adapters/http":4,"../adapters/xhr":4,"../core/enhanceError":14,"../helpers/normalizeHeaderName":28,"../utils":32,"./transitional":19,"_process":2}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1188,11 +1548,11 @@ module.exports = {
   clarifyTimeoutError: false
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports = {
   "version": "0.26.1"
 };
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -1205,7 +1565,7 @@ module.exports = function bind(fn, thisArg) {
   };
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1277,7 +1637,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-},{"./../utils":31}],22:[function(require,module,exports){
+},{"./../utils":32}],23:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1293,7 +1653,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
     : baseURL;
 };
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1348,7 +1708,7 @@ module.exports = (
     })()
 );
 
-},{"./../utils":31}],24:[function(require,module,exports){
+},{"./../utils":32}],25:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1364,7 +1724,7 @@ module.exports = function isAbsoluteURL(url) {
   return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1379,7 +1739,7 @@ module.exports = function isAxiosError(payload) {
   return utils.isObject(payload) && (payload.isAxiosError === true);
 };
 
-},{"./../utils":31}],26:[function(require,module,exports){
+},{"./../utils":32}],27:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1449,7 +1809,7 @@ module.exports = (
     })()
 );
 
-},{"./../utils":31}],27:[function(require,module,exports){
+},{"./../utils":32}],28:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils');
@@ -1463,7 +1823,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
-},{"../utils":31}],28:[function(require,module,exports){
+},{"../utils":32}],29:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1518,7 +1878,7 @@ module.exports = function parseHeaders(headers) {
   return parsed;
 };
 
-},{"./../utils":31}],29:[function(require,module,exports){
+},{"./../utils":32}],30:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1547,7 +1907,7 @@ module.exports = function spread(callback) {
   };
 };
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var VERSION = require('../env/data').version;
@@ -1631,7 +1991,7 @@ module.exports = {
   validators: validators
 };
 
-},{"../env/data":19}],31:[function(require,module,exports){
+},{"../env/data":20}],32:[function(require,module,exports){
 'use strict';
 
 var bind = require('./helpers/bind');
@@ -1982,1938 +2342,4 @@ module.exports = {
   stripBOM: stripBOM
 };
 
-},{"./helpers/bind":20}],32:[function(require,module,exports){
-/* eslint-env browser */
-module.exports = typeof self == 'object' ? self.FormData : window.FormData;
-
-},{}],33:[function(require,module,exports){
-"use strict";
-/* tslint:disable */
-/* eslint-disable */
-/**
- * OpenAI API
- * APIs for sampling from and fine-tuning language models
- *
- * The version of the OpenAPI document: 1.0.5
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OpenAIApi = exports.OpenAIApiFactory = exports.OpenAIApiFp = exports.OpenAIApiAxiosParamCreator = void 0;
-const axios_1 = require("axios");
-// Some imports not used depending on template conditions
-// @ts-ignore
-const common_1 = require("./common");
-// @ts-ignore
-const base_1 = require("./base");
-/**
- * OpenAIApi - axios parameter creator
- * @export
- */
-exports.OpenAIApiAxiosParamCreator = function (configuration) {
-    return {
-        /**
-         *
-         * @summary Immediately cancel a fine-tune job.
-         * @param {string} fineTuneId The ID of the fine-tune job to cancel
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cancelFineTune: (fineTuneId, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'fineTuneId' is not null or undefined
-            common_1.assertParamExists('cancelFineTune', 'fineTuneId', fineTuneId);
-            const localVarPath = `/fine-tunes/{fine_tune_id}/cancel`
-                .replace(`{${"fine_tune_id"}}`, encodeURIComponent(String(fineTuneId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
-         * @param {CreateAnswerRequest} createAnswerRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createAnswer: (createAnswerRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'createAnswerRequest' is not null or undefined
-            common_1.assertParamExists('createAnswer', 'createAnswerRequest', createAnswerRequest);
-            const localVarPath = `/answers`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createAnswerRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
-         * @param {CreateClassificationRequest} createClassificationRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createClassification: (createClassificationRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'createClassificationRequest' is not null or undefined
-            common_1.assertParamExists('createClassification', 'createClassificationRequest', createClassificationRequest);
-            const localVarPath = `/classifications`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createClassificationRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Creates a completion for the provided prompt and parameters
-         * @param {CreateCompletionRequest} createCompletionRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createCompletion: (createCompletionRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'createCompletionRequest' is not null or undefined
-            common_1.assertParamExists('createCompletion', 'createCompletionRequest', createCompletionRequest);
-            const localVarPath = `/completions`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createCompletionRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Creates a new edit for the provided input, instruction, and parameters
-         * @param {CreateEditRequest} createEditRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createEdit: (createEditRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'createEditRequest' is not null or undefined
-            common_1.assertParamExists('createEdit', 'createEditRequest', createEditRequest);
-            const localVarPath = `/edits`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createEditRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Creates an embedding vector representing the input text.
-         * @param {CreateEmbeddingRequest} createEmbeddingRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createEmbedding: (createEmbeddingRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'createEmbeddingRequest' is not null or undefined
-            common_1.assertParamExists('createEmbedding', 'createEmbeddingRequest', createEmbeddingRequest);
-            const localVarPath = `/embeddings`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createEmbeddingRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
-         * @param {any} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
-         * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createFile: (file, purpose, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'file' is not null or undefined
-            common_1.assertParamExists('createFile', 'file', file);
-            // verify required parameter 'purpose' is not null or undefined
-            common_1.assertParamExists('createFile', 'purpose', purpose);
-            const localVarPath = `/files`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
-            if (file !== undefined) {
-                localVarFormParams.append('file', file);
-            }
-            if (purpose !== undefined) {
-                localVarFormParams.append('purpose', purpose);
-            }
-            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), localVarFormParams.getHeaders()), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = localVarFormParams;
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-         * @param {CreateFineTuneRequest} createFineTuneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createFineTune: (createFineTuneRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'createFineTuneRequest' is not null or undefined
-            common_1.assertParamExists('createFineTune', 'createFineTuneRequest', createFineTuneRequest);
-            const localVarPath = `/fine-tunes`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createFineTuneRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
-         * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
-         * @param {CreateSearchRequest} createSearchRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createSearch: (engineId, createSearchRequest, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'engineId' is not null or undefined
-            common_1.assertParamExists('createSearch', 'engineId', engineId);
-            // verify required parameter 'createSearchRequest' is not null or undefined
-            common_1.assertParamExists('createSearch', 'createSearchRequest', createSearchRequest);
-            const localVarPath = `/engines/{engine_id}/search`
-                .replace(`{${"engine_id"}}`, encodeURIComponent(String(engineId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'POST' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(createSearchRequest, localVarRequestOptions, configuration);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Delete a file.
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteFile: (fileId, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'fileId' is not null or undefined
-            common_1.assertParamExists('deleteFile', 'fileId', fileId);
-            const localVarPath = `/files/{file_id}`
-                .replace(`{${"file_id"}}`, encodeURIComponent(String(fileId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'DELETE' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
-         * @param {string} model The model to delete
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteModel: (model, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'model' is not null or undefined
-            common_1.assertParamExists('deleteModel', 'model', model);
-            const localVarPath = `/models/{model}`
-                .replace(`{${"model"}}`, encodeURIComponent(String(model)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'DELETE' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Returns the contents of the specified file
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        downloadFile: (fileId, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'fileId' is not null or undefined
-            common_1.assertParamExists('downloadFile', 'fileId', fileId);
-            const localVarPath = `/files/{file_id}/content`
-                .replace(`{${"file_id"}}`, encodeURIComponent(String(fileId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        listEngines: (options = {}) => __awaiter(this, void 0, void 0, function* () {
-            const localVarPath = `/engines`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Returns a list of files that belong to the user\'s organization.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFiles: (options = {}) => __awaiter(this, void 0, void 0, function* () {
-            const localVarPath = `/files`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Get fine-grained status updates for a fine-tune job.
-         * @param {string} fineTuneId The ID of the fine-tune job to get events for.
-         * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFineTuneEvents: (fineTuneId, stream, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'fineTuneId' is not null or undefined
-            common_1.assertParamExists('listFineTuneEvents', 'fineTuneId', fineTuneId);
-            const localVarPath = `/fine-tunes/{fine_tune_id}/events`
-                .replace(`{${"fine_tune_id"}}`, encodeURIComponent(String(fineTuneId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            if (stream !== undefined) {
-                localVarQueryParameter['stream'] = stream;
-            }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary List your organization\'s fine-tuning jobs
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFineTunes: (options = {}) => __awaiter(this, void 0, void 0, function* () {
-            const localVarPath = `/fine-tunes`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listModels: (options = {}) => __awaiter(this, void 0, void 0, function* () {
-            const localVarPath = `/models`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
-         * @param {string} engineId The ID of the engine to use for this request
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        retrieveEngine: (engineId, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'engineId' is not null or undefined
-            common_1.assertParamExists('retrieveEngine', 'engineId', engineId);
-            const localVarPath = `/engines/{engine_id}`
-                .replace(`{${"engine_id"}}`, encodeURIComponent(String(engineId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Returns information about a specific file.
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveFile: (fileId, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'fileId' is not null or undefined
-            common_1.assertParamExists('retrieveFile', 'fileId', fileId);
-            const localVarPath = `/files/{file_id}`
-                .replace(`{${"file_id"}}`, encodeURIComponent(String(fileId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-         * @param {string} fineTuneId The ID of the fine-tune job
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveFineTune: (fineTuneId, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'fineTuneId' is not null or undefined
-            common_1.assertParamExists('retrieveFineTune', 'fineTuneId', fineTuneId);
-            const localVarPath = `/fine-tunes/{fine_tune_id}`
-                .replace(`{${"fine_tune_id"}}`, encodeURIComponent(String(fineTuneId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-        /**
-         *
-         * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
-         * @param {string} model The ID of the model to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveModel: (model, options = {}) => __awaiter(this, void 0, void 0, function* () {
-            // verify required parameter 'model' is not null or undefined
-            common_1.assertParamExists('retrieveModel', 'model', model);
-            const localVarPath = `/models/{model}`
-                .replace(`{${"model"}}`, encodeURIComponent(String(model)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = Object.assign(Object.assign({ method: 'GET' }, baseOptions), options);
-            const localVarHeaderParameter = {};
-            const localVarQueryParameter = {};
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            return {
-                url: common_1.toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        }),
-    };
-};
-/**
- * OpenAIApi - functional programming interface
- * @export
- */
-exports.OpenAIApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.OpenAIApiAxiosParamCreator(configuration);
-    return {
-        /**
-         *
-         * @summary Immediately cancel a fine-tune job.
-         * @param {string} fineTuneId The ID of the fine-tune job to cancel
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cancelFineTune(fineTuneId, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.cancelFineTune(fineTuneId, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
-         * @param {CreateAnswerRequest} createAnswerRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createAnswer(createAnswerRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createAnswer(createAnswerRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
-         * @param {CreateClassificationRequest} createClassificationRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createClassification(createClassificationRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createClassification(createClassificationRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Creates a completion for the provided prompt and parameters
-         * @param {CreateCompletionRequest} createCompletionRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createCompletion(createCompletionRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createCompletion(createCompletionRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Creates a new edit for the provided input, instruction, and parameters
-         * @param {CreateEditRequest} createEditRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createEdit(createEditRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createEdit(createEditRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Creates an embedding vector representing the input text.
-         * @param {CreateEmbeddingRequest} createEmbeddingRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createEmbedding(createEmbeddingRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createEmbedding(createEmbeddingRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
-         * @param {any} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
-         * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createFile(file, purpose, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createFile(file, purpose, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-         * @param {CreateFineTuneRequest} createFineTuneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createFineTune(createFineTuneRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createFineTune(createFineTuneRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
-         * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
-         * @param {CreateSearchRequest} createSearchRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createSearch(engineId, createSearchRequest, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.createSearch(engineId, createSearchRequest, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Delete a file.
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteFile(fileId, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.deleteFile(fileId, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
-         * @param {string} model The model to delete
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteModel(model, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.deleteModel(model, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Returns the contents of the specified file
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        downloadFile(fileId, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.downloadFile(fileId, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        listEngines(options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.listEngines(options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Returns a list of files that belong to the user\'s organization.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFiles(options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.listFiles(options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Get fine-grained status updates for a fine-tune job.
-         * @param {string} fineTuneId The ID of the fine-tune job to get events for.
-         * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFineTuneEvents(fineTuneId, stream, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.listFineTuneEvents(fineTuneId, stream, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary List your organization\'s fine-tuning jobs
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFineTunes(options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.listFineTunes(options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listModels(options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.listModels(options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
-         * @param {string} engineId The ID of the engine to use for this request
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        retrieveEngine(engineId, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveEngine(engineId, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Returns information about a specific file.
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveFile(fileId, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveFile(fileId, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-         * @param {string} fineTuneId The ID of the fine-tune job
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveFineTune(fineTuneId, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveFineTune(fineTuneId, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-        /**
-         *
-         * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
-         * @param {string} model The ID of the model to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveModel(model, options) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const localVarAxiosArgs = yield localVarAxiosParamCreator.retrieveModel(model, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
-            });
-        },
-    };
-};
-/**
- * OpenAIApi - factory interface
- * @export
- */
-exports.OpenAIApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.OpenAIApiFp(configuration);
-    return {
-        /**
-         *
-         * @summary Immediately cancel a fine-tune job.
-         * @param {string} fineTuneId The ID of the fine-tune job to cancel
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cancelFineTune(fineTuneId, options) {
-            return localVarFp.cancelFineTune(fineTuneId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
-         * @param {CreateAnswerRequest} createAnswerRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createAnswer(createAnswerRequest, options) {
-            return localVarFp.createAnswer(createAnswerRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
-         * @param {CreateClassificationRequest} createClassificationRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createClassification(createClassificationRequest, options) {
-            return localVarFp.createClassification(createClassificationRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Creates a completion for the provided prompt and parameters
-         * @param {CreateCompletionRequest} createCompletionRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createCompletion(createCompletionRequest, options) {
-            return localVarFp.createCompletion(createCompletionRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Creates a new edit for the provided input, instruction, and parameters
-         * @param {CreateEditRequest} createEditRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createEdit(createEditRequest, options) {
-            return localVarFp.createEdit(createEditRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Creates an embedding vector representing the input text.
-         * @param {CreateEmbeddingRequest} createEmbeddingRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createEmbedding(createEmbeddingRequest, options) {
-            return localVarFp.createEmbedding(createEmbeddingRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
-         * @param {any} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
-         * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createFile(file, purpose, options) {
-            return localVarFp.createFile(file, purpose, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-         * @param {CreateFineTuneRequest} createFineTuneRequest
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createFineTune(createFineTuneRequest, options) {
-            return localVarFp.createFineTune(createFineTuneRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
-         * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
-         * @param {CreateSearchRequest} createSearchRequest
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        createSearch(engineId, createSearchRequest, options) {
-            return localVarFp.createSearch(engineId, createSearchRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete a file.
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteFile(fileId, options) {
-            return localVarFp.deleteFile(fileId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
-         * @param {string} model The model to delete
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteModel(model, options) {
-            return localVarFp.deleteModel(model, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Returns the contents of the specified file
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        downloadFile(fileId, options) {
-            return localVarFp.downloadFile(fileId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        listEngines(options) {
-            return localVarFp.listEngines(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Returns a list of files that belong to the user\'s organization.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFiles(options) {
-            return localVarFp.listFiles(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Get fine-grained status updates for a fine-tune job.
-         * @param {string} fineTuneId The ID of the fine-tune job to get events for.
-         * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFineTuneEvents(fineTuneId, stream, options) {
-            return localVarFp.listFineTuneEvents(fineTuneId, stream, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary List your organization\'s fine-tuning jobs
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listFineTunes(options) {
-            return localVarFp.listFineTunes(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listModels(options) {
-            return localVarFp.listModels(options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
-         * @param {string} engineId The ID of the engine to use for this request
-         * @param {*} [options] Override http request option.
-         * @deprecated
-         * @throws {RequiredError}
-         */
-        retrieveEngine(engineId, options) {
-            return localVarFp.retrieveEngine(engineId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Returns information about a specific file.
-         * @param {string} fileId The ID of the file to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveFile(fileId, options) {
-            return localVarFp.retrieveFile(fileId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-         * @param {string} fineTuneId The ID of the fine-tune job
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveFineTune(fineTuneId, options) {
-            return localVarFp.retrieveFineTune(fineTuneId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         *
-         * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
-         * @param {string} model The ID of the model to use for this request
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        retrieveModel(model, options) {
-            return localVarFp.retrieveModel(model, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-/**
- * OpenAIApi - object-oriented interface
- * @export
- * @class OpenAIApi
- * @extends {BaseAPI}
- */
-class OpenAIApi extends base_1.BaseAPI {
-    /**
-     *
-     * @summary Immediately cancel a fine-tune job.
-     * @param {string} fineTuneId The ID of the fine-tune job to cancel
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    cancelFineTune(fineTuneId, options) {
-        return exports.OpenAIApiFp(this.configuration).cancelFineTune(fineTuneId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Answers the specified question using the provided documents and examples.  The endpoint first [searches](/docs/api-reference/searches) over provided documents or files to find relevant context. The relevant context is combined with the provided examples and question to create the prompt for [completion](/docs/api-reference/completions).
-     * @param {CreateAnswerRequest} createAnswerRequest
-     * @param {*} [options] Override http request option.
-     * @deprecated
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createAnswer(createAnswerRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createAnswer(createAnswerRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Classifies the specified `query` using provided examples.  The endpoint first [searches](/docs/api-reference/searches) over the labeled examples to select the ones most relevant for the particular query. Then, the relevant examples are combined with the query to construct a prompt to produce the final label via the [completions](/docs/api-reference/completions) endpoint.  Labeled examples can be provided via an uploaded `file`, or explicitly listed in the request using the `examples` parameter for quick tests and small scale use cases.
-     * @param {CreateClassificationRequest} createClassificationRequest
-     * @param {*} [options] Override http request option.
-     * @deprecated
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createClassification(createClassificationRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createClassification(createClassificationRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Creates a completion for the provided prompt and parameters
-     * @param {CreateCompletionRequest} createCompletionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createCompletion(createCompletionRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createCompletion(createCompletionRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Creates a new edit for the provided input, instruction, and parameters
-     * @param {CreateEditRequest} createEditRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createEdit(createEditRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createEdit(createEditRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Creates an embedding vector representing the input text.
-     * @param {CreateEmbeddingRequest} createEmbeddingRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createEmbedding(createEmbeddingRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createEmbedding(createEmbeddingRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
-     * @param {any} file Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.  If the &#x60;purpose&#x60; is set to \\\&quot;fine-tune\\\&quot;, each line is a JSON record with \\\&quot;prompt\\\&quot; and \\\&quot;completion\\\&quot; fields representing your [training examples](/docs/guides/fine-tuning/prepare-training-data).
-     * @param {string} purpose The intended purpose of the uploaded documents.  Use \\\&quot;fine-tune\\\&quot; for [Fine-tuning](/docs/api-reference/fine-tunes). This allows us to validate the format of the uploaded file.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createFile(file, purpose, options) {
-        return exports.OpenAIApiFp(this.configuration).createFile(file, purpose, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Creates a job that fine-tunes a specified model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-     * @param {CreateFineTuneRequest} createFineTuneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createFineTune(createFineTuneRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createFineTune(createFineTuneRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary The search endpoint computes similarity scores between provided query and documents. Documents can be passed directly to the API if there are no more than 200 of them.  To go beyond the 200 document limit, documents can be processed offline and then used for efficient retrieval at query time. When `file` is set, the search endpoint searches over all the documents in the given file and returns up to the `max_rerank` number of documents. These documents will be returned along with their search scores.  The similarity score is a positive score that usually ranges from 0 to 300 (but can sometimes go higher), where a score above 200 usually means the document is semantically similar to the query.
-     * @param {string} engineId The ID of the engine to use for this request.  You can select one of &#x60;ada&#x60;, &#x60;babbage&#x60;, &#x60;curie&#x60;, or &#x60;davinci&#x60;.
-     * @param {CreateSearchRequest} createSearchRequest
-     * @param {*} [options] Override http request option.
-     * @deprecated
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    createSearch(engineId, createSearchRequest, options) {
-        return exports.OpenAIApiFp(this.configuration).createSearch(engineId, createSearchRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Delete a file.
-     * @param {string} fileId The ID of the file to use for this request
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    deleteFile(fileId, options) {
-        return exports.OpenAIApiFp(this.configuration).deleteFile(fileId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Delete a fine-tuned model. You must have the Owner role in your organization.
-     * @param {string} model The model to delete
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    deleteModel(model, options) {
-        return exports.OpenAIApiFp(this.configuration).deleteModel(model, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Returns the contents of the specified file
-     * @param {string} fileId The ID of the file to use for this request
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    downloadFile(fileId, options) {
-        return exports.OpenAIApiFp(this.configuration).downloadFile(fileId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Lists the currently available (non-finetuned) models, and provides basic information about each one such as the owner and availability.
-     * @param {*} [options] Override http request option.
-     * @deprecated
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    listEngines(options) {
-        return exports.OpenAIApiFp(this.configuration).listEngines(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Returns a list of files that belong to the user\'s organization.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    listFiles(options) {
-        return exports.OpenAIApiFp(this.configuration).listFiles(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Get fine-grained status updates for a fine-tune job.
-     * @param {string} fineTuneId The ID of the fine-tune job to get events for.
-     * @param {boolean} [stream] Whether to stream events for the fine-tune job. If set to true, events will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) as they become available. The stream will terminate with a &#x60;data: [DONE]&#x60; message when the job is finished (succeeded, cancelled, or failed).  If set to false, only events generated so far will be returned.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    listFineTuneEvents(fineTuneId, stream, options) {
-        return exports.OpenAIApiFp(this.configuration).listFineTuneEvents(fineTuneId, stream, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary List your organization\'s fine-tuning jobs
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    listFineTunes(options) {
-        return exports.OpenAIApiFp(this.configuration).listFineTunes(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Lists the currently available models, and provides basic information about each one such as the owner and availability.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    listModels(options) {
-        return exports.OpenAIApiFp(this.configuration).listModels(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Retrieves a model instance, providing basic information about it such as the owner and availability.
-     * @param {string} engineId The ID of the engine to use for this request
-     * @param {*} [options] Override http request option.
-     * @deprecated
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    retrieveEngine(engineId, options) {
-        return exports.OpenAIApiFp(this.configuration).retrieveEngine(engineId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Returns information about a specific file.
-     * @param {string} fileId The ID of the file to use for this request
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    retrieveFile(fileId, options) {
-        return exports.OpenAIApiFp(this.configuration).retrieveFile(fileId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Gets info about the fine-tune job.  [Learn more about Fine-tuning](/docs/guides/fine-tuning)
-     * @param {string} fineTuneId The ID of the fine-tune job
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    retrieveFineTune(fineTuneId, options) {
-        return exports.OpenAIApiFp(this.configuration).retrieveFineTune(fineTuneId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     *
-     * @summary Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
-     * @param {string} model The ID of the model to use for this request
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OpenAIApi
-     */
-    retrieveModel(model, options) {
-        return exports.OpenAIApiFp(this.configuration).retrieveModel(model, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-exports.OpenAIApi = OpenAIApi;
-
-},{"./base":34,"./common":35,"axios":2}],34:[function(require,module,exports){
-"use strict";
-/* tslint:disable */
-/* eslint-disable */
-/**
- * OpenAI API
- * APIs for sampling from and fine-tuning language models
- *
- * The version of the OpenAPI document: 1.0.5
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequiredError = exports.BaseAPI = exports.COLLECTION_FORMATS = exports.BASE_PATH = void 0;
-// Some imports not used depending on template conditions
-// @ts-ignore
-const axios_1 = require("axios");
-exports.BASE_PATH = "https://api.openai.com/v1".replace(/\/+$/, "");
-/**
- *
- * @export
- */
-exports.COLLECTION_FORMATS = {
-    csv: ",",
-    ssv: " ",
-    tsv: "\t",
-    pipes: "|",
-};
-/**
- *
- * @export
- * @class BaseAPI
- */
-class BaseAPI {
-    constructor(configuration, basePath = exports.BASE_PATH, axios = axios_1.default) {
-        this.basePath = basePath;
-        this.axios = axios;
-        if (configuration) {
-            this.configuration = configuration;
-            this.basePath = configuration.basePath || this.basePath;
-        }
-    }
-}
-exports.BaseAPI = BaseAPI;
-;
-/**
- *
- * @export
- * @class RequiredError
- * @extends {Error}
- */
-class RequiredError extends Error {
-    constructor(field, msg) {
-        super(msg);
-        this.field = field;
-        this.name = "RequiredError";
-    }
-}
-exports.RequiredError = RequiredError;
-
-},{"axios":2}],35:[function(require,module,exports){
-"use strict";
-/* tslint:disable */
-/* eslint-disable */
-/**
- * OpenAI API
- * APIs for sampling from and fine-tuning language models
- *
- * The version of the OpenAPI document: 1.0.5
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createRequestFunction = exports.toPathString = exports.serializeDataIfNeeded = exports.setSearchParams = exports.setOAuthToObject = exports.setBearerAuthToObject = exports.setBasicAuthToObject = exports.setApiKeyToObject = exports.assertParamExists = exports.DUMMY_BASE_URL = void 0;
-const base_1 = require("./base");
-/**
- *
- * @export
- */
-exports.DUMMY_BASE_URL = 'https://example.com';
-/**
- *
- * @throws {RequiredError}
- * @export
- */
-exports.assertParamExists = function (functionName, paramName, paramValue) {
-    if (paramValue === null || paramValue === undefined) {
-        throw new base_1.RequiredError(paramName, `Required parameter ${paramName} was null or undefined when calling ${functionName}.`);
-    }
-};
-/**
- *
- * @export
- */
-exports.setApiKeyToObject = function (object, keyParamName, configuration) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (configuration && configuration.apiKey) {
-            const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                ? yield configuration.apiKey(keyParamName)
-                : yield configuration.apiKey;
-            object[keyParamName] = localVarApiKeyValue;
-        }
-    });
-};
-/**
- *
- * @export
- */
-exports.setBasicAuthToObject = function (object, configuration) {
-    if (configuration && (configuration.username || configuration.password)) {
-        object["auth"] = { username: configuration.username, password: configuration.password };
-    }
-};
-/**
- *
- * @export
- */
-exports.setBearerAuthToObject = function (object, configuration) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (configuration && configuration.accessToken) {
-            const accessToken = typeof configuration.accessToken === 'function'
-                ? yield configuration.accessToken()
-                : yield configuration.accessToken;
-            object["Authorization"] = "Bearer " + accessToken;
-        }
-    });
-};
-/**
- *
- * @export
- */
-exports.setOAuthToObject = function (object, name, scopes, configuration) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (configuration && configuration.accessToken) {
-            const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                ? yield configuration.accessToken(name, scopes)
-                : yield configuration.accessToken;
-            object["Authorization"] = "Bearer " + localVarAccessTokenValue;
-        }
-    });
-};
-/**
- *
- * @export
- */
-exports.setSearchParams = function (url, ...objects) {
-    const searchParams = new URLSearchParams(url.search);
-    for (const object of objects) {
-        for (const key in object) {
-            if (Array.isArray(object[key])) {
-                searchParams.delete(key);
-                for (const item of object[key]) {
-                    searchParams.append(key, item);
-                }
-            }
-            else {
-                searchParams.set(key, object[key]);
-            }
-        }
-    }
-    url.search = searchParams.toString();
-};
-/**
- *
- * @export
- */
-exports.serializeDataIfNeeded = function (value, requestOptions, configuration) {
-    const nonString = typeof value !== 'string';
-    const needsSerialization = nonString && configuration && configuration.isJsonMime
-        ? configuration.isJsonMime(requestOptions.headers['Content-Type'])
-        : nonString;
-    return needsSerialization
-        ? JSON.stringify(value !== undefined ? value : {})
-        : (value || "");
-};
-/**
- *
- * @export
- */
-exports.toPathString = function (url) {
-    return url.pathname + url.search + url.hash;
-};
-/**
- *
- * @export
- */
-exports.createRequestFunction = function (axiosArgs, globalAxios, BASE_PATH, configuration) {
-    return (axios = globalAxios, basePath = BASE_PATH) => {
-        const axiosRequestArgs = Object.assign(Object.assign({}, axiosArgs.options), { url: ((configuration === null || configuration === void 0 ? void 0 : configuration.basePath) || basePath) + axiosArgs.url });
-        return axios.request(axiosRequestArgs);
-    };
-};
-
-},{"./base":34}],36:[function(require,module,exports){
-"use strict";
-/* tslint:disable */
-/* eslint-disable */
-/**
- * OpenAI API
- * APIs for sampling from and fine-tuning language models
- *
- * The version of the OpenAPI document: 1.0.5
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Configuration = void 0;
-const packageJson = require("../package.json");
-class Configuration {
-    constructor(param = {}) {
-        this.apiKey = param.apiKey;
-        this.organization = param.organization;
-        this.username = param.username;
-        this.password = param.password;
-        this.accessToken = param.accessToken;
-        this.basePath = param.basePath;
-        this.baseOptions = param.baseOptions;
-        this.formDataCtor = param.formDataCtor;
-        if (!this.baseOptions) {
-            this.baseOptions = {};
-        }
-        this.baseOptions.headers = Object.assign({ 'User-Agent': `OpenAI/NodeJS/${packageJson.version}`, 'Authorization': `Bearer ${this.apiKey}` }, this.baseOptions.headers);
-        if (this.organization) {
-            this.baseOptions.headers['OpenAI-Organization'] = this.organization;
-        }
-        if (!this.formDataCtor) {
-            this.formDataCtor = require("form-data");
-        }
-    }
-    /**
-     * Check if the given MIME is a JSON MIME.
-     * JSON MIME examples:
-     *   application/json
-     *   application/json; charset=UTF8
-     *   APPLICATION/JSON
-     *   application/vnd.company+json
-     * @param mime - MIME (Multipurpose Internet Mail Extensions)
-     * @return True if the given MIME is JSON, false otherwise.
-     */
-    isJsonMime(mime) {
-        const jsonMime = new RegExp('^(application\/json|[^;/ \t]+\/[^;/ \t]+[+]json)[ \t]*(;.*)?$', 'i');
-        return mime !== null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
-    }
-}
-exports.Configuration = Configuration;
-
-},{"../package.json":38,"form-data":32}],37:[function(require,module,exports){
-"use strict";
-/* tslint:disable */
-/* eslint-disable */
-/**
- * OpenAI API
- * APIs for sampling from and fine-tuning language models
- *
- * The version of the OpenAPI document: 1.0.5
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./api"), exports);
-__exportStar(require("./configuration"), exports);
-
-},{"./api":33,"./configuration":36}],38:[function(require,module,exports){
-module.exports={
-  "name": "openai",
-  "version": "3.0.0",
-  "description": "Node.js library for the OpenAI API",
-  "keywords": [
-    "openai",
-    "open",
-    "ai",
-    "gpt-3",
-    "gpt3"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:openai/openai-node.git"
-  },
-  "author": "OpenAI",
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc --outDir dist/"
-  },
-  "dependencies": {
-    "axios": "^0.26.0",
-    "form-data": "^4.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^12.11.5",
-    "typescript": "^3.6.4"
-  }
-}
-
-},{}],39:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}]},{},[1]);
+},{"./helpers/bind":21}]},{},[1]);
