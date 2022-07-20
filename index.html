@@ -94,113 +94,71 @@
       </div>
     </nav>
     <div class="card-1">
-      <h2>Location API</h2>
+      <h2>Weather API</h2>
       <p class="text">
-        This is a function which contacts
-        <a class="link" target="_blank" href="https://icanhazip.com"
-          >icanhazip.com</a
+        This is a function which contacts the
+        <a class="link" target="_blank" href="https://www.weatherapi.com/"
+          >Weather API</a
         >
-        and posts the IP address to the
-        <a
-          class="link"
-          target="_blank"
-          href="https://rapidapi.com/ipregistry3-ipregistry/api/ip-geolocation-and-threat-detection"
-          >IP Geolocation and Threat Detection API</a
-        >
-        provided by
-        <a class="link" target="_blank" href="https://rapidapi.com/"
-          >Rapid API</a
-        >
-        to retrieve information about the given IP address. <br />
+        with the given city name to retrieve current weather statistics of that
+        city. <br />
         <br />
-        Click start to contact the API.
+        Press enter to submit the city name.
       </p>
-      <button class="start-button">Start</button>
+      <input placeholder="City Name" id="prompt" type="text" />
       <h3>Output</h3>
       <p id="output" class="text output">This is where the output will be...</p>
       <div class="api-info">
         <ul class="api-ul">
-          <h4>IP Information</h4>
+          <h4>Current Weather Information</h4>
           <li>
-            <p>IPv4</p>
-            <p id="ip" class="api-response">Null</p>
+            <p>City</p>
+            <p id="cityName" class="api-response">Null</p>
           </li>
           <li>
-            <p>Provider</p>
-            <p id="provider" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Company</p>
-            <p id="company" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Connection Domain</p>
-            <p id="domain" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Connection Organization</p>
-            <p id="organization" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Connection Route</p>
-            <p id="route" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Connection Type</p>
-            <p id="connectionType" class="api-response">Null</p>
-          </li>
-          <h4>Location</h4>
-          <li>
-            <p>Continent</p>
-            <p id="continent" class="api-response">Null</p>
+            <p>Region</p>
+            <p id="region" class="api-response">Null</p>
           </li>
           <li>
             <p>Country</p>
             <p id="country" class="api-response">Null</p>
           </li>
           <li>
-            <p>Capital</p>
-            <p id="capital" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Country Code</p>
-            <p id="countryCode" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Country Population</p>
-            <p id="population" class="api-response">Null</p>
-          </li>
-          <ul id="languages-ul"></ul>
-          <li>
-            <p>Region</p>
-            <p id="region" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>City</p>
-            <p id="city" class="api-response">Null</p>
-          </li>
-          <h4>Security</h4>
-          <ul id="security-ul"></ul>
-          <h4>Time Zone</h4>
-          <li>
-            <p>Time Zone ID</p>
-            <p id="timeZoneID" class="api-response">Null</p>
-          </li>
-          <li>
-            <p>Time Zone Abbr.</p>
-            <p id="timeZoneAbbr" class="api-response">Null</p>
-          </li>
-          <li>
             <p>Local Time</p>
             <p id="localTime" class="api-response">Null</p>
           </li>
           <li>
-            <p>Time Zone</p>
-            <p id="timeZone" class="api-response">Null</p>
+            <p>Temp &deg;C</p>
+            <p id="tempC" class="api-response">Null</p>
           </li>
           <li>
-            <p>Daylight Saving</p>
-            <p id="daylightSaving" class="api-response">Null</p>
+            <p>Temp &deg;F</p>
+            <p id="tempF" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Is Day</p>
+            <p id="isDay" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Condition</p>
+            <p id="condition" class="api-response">Null</p>
+          </li>
+          <h4>Location</h4>
+          <li>
+            <p>Last Updated</p>
+            <p id="lastUpdated" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Wind MPH</p>
+            <p id="windMph" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Wind KPH</p>
+            <p id="windKph" class="api-response">Null</p>
+          </li>
+          <li>
+            <p>Wind Direction</p>
+            <p id="windDirection" class="api-response">Null</p>
           </li>
         </ul>
       </div>
