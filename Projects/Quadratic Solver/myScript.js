@@ -90,8 +90,8 @@ inputC.oninput = function() {
 }
 
 function quadraticSolve (a, b, c) {
-  var discriminant = (Math.pow(b,2)-4*a*c)**(1/2)
-  var solutions = [((-b+discriminant)/2*a),((-b-discriminant)/2*a)]
+  var discriminant = ((b*b)-(4*a*c))**(1/2)
+  var solutions = [((-b+discriminant)/(2*a)),((-b-discriminant)/(2*a))]
   // for (i = 0; i < solutions.length; i++) {
   //     solutions[i] = 'x = ' + solutions[i];
   // }
